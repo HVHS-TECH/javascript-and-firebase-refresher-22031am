@@ -9,7 +9,7 @@ messageSpace.innerHTML = "You've connected to the JavaScript!";
  Functions
 **********************/
 
-// Function for the "Press me!" button
+// Function for the "Press me" button
 function pressBtn() {
     var heading = document.getElementById("hChange");
     var input = document.getElementById("userText").value; //get the user input
