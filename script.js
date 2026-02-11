@@ -12,5 +12,6 @@ messageSpace.innerHTML = "You've connected to the JavaScript!";
 // Function for the "Press me!" button
 function pressBtn() {
     var heading = document.getElementById("hChange");
-    heading.innerHTML = "You pressed the button!";
+    var input = document.getElementById("userText").value; //get the user input
+    heading.innerHTML = input; //updates the heading with the typed text 
 }
