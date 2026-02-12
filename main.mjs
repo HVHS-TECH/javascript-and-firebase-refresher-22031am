@@ -15,7 +15,7 @@ console.log('%c main.mjs',
 /**************************************************************/
 // Import all the constants & functions required from fb_io module
 
-import {fb_initialise, fb_authenticate, fb_detectLogin } from './fb_io.mjs';
+import {fb_initialise, fb_authenticate, fb_detectLogin, fb_writerecord } from './fb_io.mjs';
 
 /**************************************************************/
 // Initialise Firebase
@@ -29,6 +29,17 @@ window.fb_authenticate = fb_authenticate;
 window.fb_detectLogin  = fb_detectLogin;
 window.fb_writerecord = fb_writerecord;
 
+/**************************************************************/
+// JavaScript button function
+// Changes the heading to whatever the user types in the text box
+/**************************************************************/
+window.pressBtn = function() {
+    console.log("pressBtn clicked");
+
+    const text = document.getElementById("userText").value;
+
+    document.getElementById("hChange").innerText = text;
+};
 
 /**************************************************************/
 //   END OF CODE

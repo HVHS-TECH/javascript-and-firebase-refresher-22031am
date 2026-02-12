@@ -38,14 +38,13 @@ from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged }
  from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
- let FB_GAMEDB; 
 
  /**************************************************************/
 // EXPORT FUNCTIONS
 // List all the functions called by code or html outside of this module
 /**************************************************************/
 export { 
-    fb_initialise, fb_authenticate, fb_detectLogin };
+    fb_initialise, fb_authenticate, fb_detectLogin, fb_writerecord };
 
  /******************************************************/
 // fb_initialise()
@@ -156,8 +155,26 @@ function fb_writerecord() {
     console.log('%c fb_writerecord(): ', 
         'color: ' + COL_C + '; background-color: ' + COL_B + ';');
 
+       // 1️⃣ Get the text typed by the user
+    const userText = document.getElementById("userText").value;
+    if (!userText) {
+        alert("Please type something to save!");
+        return;
+    }
+
+    
+    // Create object with user info + message to get saved into the database
+    const dataToSave = {
+        displayName: userDetails.displayName,
+        email: userDetails.email,
+        photoURL: userDetails.photoURL,
+        uid: userDetails.uid,
+        message: userText,
+    };
+
+    //save it to firebase under the user's UID
     const dbReference= ref(FB_GAMEDB, 'userDetails/' + userDetails.uid);
-    set(dbReference, userDetails).then(() => {
+    set(dbReference, dataToSave).then(() => {
         // Code for a successful write goes here
         console.log('%c fb_writerecord():successful! ', 
             'color: ' + COL_C + '; background-color: ' + COL_B + ';');
