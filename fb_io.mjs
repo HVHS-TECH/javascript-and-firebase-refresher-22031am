@@ -31,11 +31,14 @@ let userDetails = {
 import { initializeApp } 
 from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 
+
 import { getDatabase, ref, set, get, update } 
 from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged }
  from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+ let FB_GAMEDB; 
 
  /**************************************************************/
 // EXPORT FUNCTIONS
@@ -138,5 +141,28 @@ function fb_detectLogin() {
     }, (error) => {
     // Code for an onAuthStateChanged error goes here
     console.log(error);
+    });
+}
+
+
+/******************************************************/
+// fb_writerecord()
+// Called by html write record button
+// Login to Firebase via Google authentication
+// Input:  n/a
+// Return: n/a
+/******************************************************/
+function fb_writerecord() {
+    console.log('%c fb_writerecord(): ', 
+        'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+
+    const dbReference= ref(FB_GAMEDB, 'userDetails/' + userDetails.uid);
+    set(dbReference, userDetails).then(() => {
+        // Code for a successful write goes here
+        console.log('%c fb_writerecord():successful! ', 
+            'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+    }).catch((error) => {
+        // Code for a write error goes here
+        console.log(error);
     });
 }

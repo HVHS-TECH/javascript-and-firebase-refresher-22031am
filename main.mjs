@@ -27,6 +27,7 @@ fb_initialise();
 /**************************************************************/
 window.fb_authenticate = fb_authenticate;
 window.fb_detectLogin  = fb_detectLogin;
+window.fb_writerecord = fb_writerecord;
 
 
 /**************************************************************/
