@@ -39,12 +39,13 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged }
  from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
 
+
  /**************************************************************/
 // EXPORT FUNCTIONS
 // List all the functions called by code or html outside of this module
 /**************************************************************/
 export { 
-    fb_initialise, fb_authenticate, fb_detectLogin, fb_writerecord };
+    fb_initialise, fb_authenticate, fb_detectLogin, fb_writerecord, fb_readrecord };
 
  /******************************************************/
 // fb_initialise()
@@ -183,3 +184,37 @@ function fb_writerecord() {
         console.log(error);
     });
 }
+
+
+/******************************************************/
+// fb_readrecord()
+// Called by html read record button
+// Login to Firebase via Google authentication
+// Input:  n/a
+// Return: n/a
+/******************************************************/
+function fb_readrecord() {
+    console.log('%c fb_readrecord(): ', 
+        'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+    
+    const dbReference= ref(FB_GAMEDB, 'userDetails/' + userDetails.uid);
+    get(dbReference).then((snapshot) => {
+        var fb_data = snapshot.val();
+        if (fb_data != null) {
+        console.log(fb_data);
+        
+        // Code for a successful read goes here
+        console.log('%c fb_readrecord(): successful!', 
+            'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+            
+        } else {
+            //Code for no record found goes here
+            console.log('no record found');
+        }
+    }).catch((error) => {
+        // Code for a read error goes here
+        console.log(error);
+    });
+}
+
+

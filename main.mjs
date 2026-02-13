@@ -15,7 +15,7 @@ console.log('%c main.mjs',
 /**************************************************************/
 // Import all the constants & functions required from fb_io module
 
-import {fb_initialise, fb_authenticate, fb_detectLogin, fb_writerecord } from './fb_io.mjs';
+import {fb_initialise, fb_authenticate, fb_detectLogin, fb_writerecord, fb_readrecord } from './fb_io.mjs';
 
 /**************************************************************/
 // Initialise Firebase
@@ -28,6 +28,7 @@ fb_initialise();
 window.fb_authenticate = fb_authenticate;
 window.fb_detectLogin  = fb_detectLogin;
 window.fb_writerecord = fb_writerecord;
+window.fb_readrecord =  fb_readrecord;
 
 /**************************************************************/
 // JavaScript button function
