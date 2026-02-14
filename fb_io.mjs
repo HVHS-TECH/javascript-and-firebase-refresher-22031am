@@ -32,7 +32,7 @@ import { initializeApp }
 from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 
 
-import { getDatabase, ref, set, get, update } 
+import { getDatabase, ref, set, get, update, push} 
 from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged }
@@ -45,7 +45,7 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged }
 // List all the functions called by code or html outside of this module
 /**************************************************************/
 export { 
-    fb_initialise, fb_authenticate, fb_detectLogin, fb_writerecord, fb_readrecord };
+    fb_initialise, fb_authenticate, fb_detectLogin, fb_writerecord, fb_readrecord, fb_writemessages, fb_readmessages };
 
  /******************************************************/
 // fb_initialise()
@@ -105,7 +105,7 @@ function fb_authenticate() {
         console.log(userDetails);
             console.table(userDetails);
         // redirect if needed
-             window.location.href = "select_game.html";
+           //  window.location.href = "select_game.html";
         })
         .catch((error) => {
             console.log(error);
@@ -156,14 +156,13 @@ function fb_writerecord() {
     console.log('%c fb_writerecord(): ', 
         'color: ' + COL_C + '; background-color: ' + COL_B + ';');
 
-       // 1️⃣ Get the text typed by the user
+       // Get the text typed by the user
     const userText = document.getElementById("userText").value;
     if (!userText) {
         alert("Please type something to save!");
         return;
     }
 
-    
     // Create object with user info + message to get saved into the database
     const dataToSave = {
         displayName: userDetails.displayName,
@@ -203,6 +202,9 @@ function fb_readrecord() {
         if (fb_data != null) {
         console.log(fb_data);
         
+        //making the message from firebase appear on the page
+        document.getElementById("hChange").innerText = fb_data.message;
+        
         // Code for a successful read goes here
         console.log('%c fb_readrecord(): successful!', 
             'color: ' + COL_C + '; background-color: ' + COL_B + ';');
@@ -217,4 +219,71 @@ function fb_readrecord() {
     });
 }
 
+/******************************************************/
+// fb_writemessages()
+// Saves a new message with username
+/******************************************************/
 
+function fb_writemessages() {
+    console.log('%c fb_writemessages(): ', 
+        'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+        // Get the text typed by the user
+    const userText = document.getElementById("userText").value;
+    if (!userText) {
+        alert("Please type something to save!");
+        return;
+    }
+
+    //Save each message as a new entry under 'messages'
+    const messagesRef = ref(FB_GAMEDB, 'messages');
+    push(messagesRef, {
+        displayName: userDetails.displayName,
+        message: userText,
+    }).then(() => {
+
+        // Code for a successful write goes here
+        console.log('%c fb_writemessages():successful! ', 
+            'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+    }).catch((error) => {
+        // Code for a write error goes here
+        console.log(error);
+    });
+}
+
+/******************************************************/
+// fb_readmessages()
+// Displays all new messages from all users
+/******************************************************/
+function fb_readmessages() {
+    console.log('%c fb_readmessages(): ', 
+        'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+    
+    const messagesRef = ref(FB_GAMEDB, 'messages');
+    get(messagesRef).then((snapshot) => {
+        const allMessages = snapshot.val();
+        if (allMessages != null) {
+            console.log(allMessages);
+
+            // Convert all messages into a readable string for the page
+            let displayText = '';
+            for (let key in allMessages) {
+                const msg = allMessages[key];
+                displayText += msg.displayName + ': ' + msg.message + ' ';
+            }
+
+            // Show all messages on the page
+            document.getElementById("hChange").innerText = displayText;
+
+            // Code for a successful read goes here
+            console.log('%c fb_readmessages(): successful!', 
+                'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+
+        } else {
+            console.log('No messages found');
+            document.getElementById("hChange").innerText = "No messages found";
+        }
+    }).catch((error) => {
+        // Code for a write error goes here
+        console.log(error);
+    });
+}
